@@ -1,0 +1,29 @@
+Name:           quaternion
+Version:        0.1
+Synopsis:       Quaternions
+Description:
+  Quaternions
+
+Cabal-Version:  >= 1.6
+License:        BSD3
+License-File:   LICENSE
+Author:         Aleksey Khudyakov <alexey.skladnoy@gmail.com>
+Maintainer:     Aleksey Khudyakov <alexey.skladnoy@gmail.com>
+Bug-reports:    https://github.com/Shimuuar/quaternion/issues
+Category:       Data
+Build-Type:     Simple
+
+source-repository head
+  type:     hg
+  location: http://bitbucket.org/Shimuuar/quaternion
+source-repository head
+  type:     git
+  location: http://github.com/Shimuuar/quaternion
+
+Library
+  Ghc-options:          -Wall
+  Build-Depends:
+    base >=3 && <5,
+    fixed-vector
+  Exposed-modules:
+    Data.Quaternion
