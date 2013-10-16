@@ -12,10 +12,13 @@ module Data.Quaternion (
   , realQuat
   , quaternionNorm
   , quaternionNormSq
+    -- * Vector rotation
+  , rotation
+  , rotateVector
   ) where
 
 import qualified Data.Vector.Fixed         as F
-import           Data.Vector.Fixed         (Dim,Vector,N4)
+import           Data.Vector.Fixed         (Dim,Vector,N3,N4)
 import           Data.Vector.Fixed.Unboxed (Vec4)
 
 
@@ -88,3 +91,25 @@ quaternionNorm = sqrt . quaternionNormSq
 quaternionNormSq :: (Vector v a, Dim v ~ N4, Num a) => QuaternionG v a -> a
 quaternionNormSq = F.sum . F.map (\x -> x*x)
 {-# INLINE quaternionNormSq #-}
+
+
+----------------------------------------------------------------
+-- Rotations
+----------------------------------------------------------------
+
+rotation :: (Vector v a, Dim v ~ N3, Vector q a, Dim q ~ N4, RealFloat a)
+         => a -> v a -> QuaternionG q a
+{-# INLINE rotation #-}
+rotation a axis
+  = F.mk4 c (s * x) (s * y) (s * z)
+  where
+    c = cos $ a / 2
+    s = sin $ a / 2
+    (x,y,z) = F.convert axis
+
+-- | Rotate vector using quaternion assuming that it have unit norm.
+rotateVector :: (Vector q a, Dim q ~ N4, Vector v a, Dim v ~ N3, Floating a)
+             => QuaternionG q a -> v a -> v a
+{-# INLINE rotateVector #-}
+rotateVector q v
+  = F.tail $ q * F.cons 0 v * recip q
