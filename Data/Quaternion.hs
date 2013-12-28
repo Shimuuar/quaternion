@@ -14,6 +14,9 @@ module Data.Quaternion (
   , quaternionNormSq
     -- * Vector rotation
   , rotation
+  , rotX
+  , rotY
+  , rotZ
   , rotateVector
   ) where
 
@@ -106,6 +109,22 @@ rotation a axis
     c = cos $ a / 2
     s = sin $ a / 2
     (x,y,z) = F.convert axis
+
+rotX :: (Vector q a, Dim q ~ N4, RealFloat a)
+     => a -> QuaternionG q a
+{-# INLINE rotX #-}
+rotX a = rotation a (1,0,0)
+
+rotY :: (Vector q a, Dim q ~ N4, RealFloat a)
+     => a -> QuaternionG q a
+{-# INLINE rotY #-}
+rotY a = rotation a (0,1,0)
+
+rotZ :: (Vector q a, Dim q ~ N4, RealFloat a)
+     => a -> QuaternionG q a
+{-# INLINE rotZ #-}
+rotZ a = rotation a (0,0,1)
+
 
 -- | Rotate vector using quaternion assuming that it have unit norm.
 rotateVector :: (Vector q a, Dim q ~ N4, Vector v a, Dim v ~ N3, Floating a)
